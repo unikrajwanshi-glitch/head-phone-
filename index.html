@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VOID — Wireless Headphones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --yellow: #FFD600;
+      --yellow-deep: #F0C400;
+      --yellow-light: #FFF176;
+      --black: #111111;
+      --gray: #1e1e1e;
+      --mid: #2e2e2e;
+      --white: #FAFAFA;
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.13);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow-x: hidden;
+      background: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--white);
+    }
+
+    /* ── PAGE LOAD FADE ── */
+    body { opacity: 0; animation: pageIn 1s ease forwards 0.15s; }
+    @keyframes pageIn { to { opacity: 1; } }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 60px;
+      mix-blend-mode: normal;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.18em;
+      color: var(--yellow);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--yellow); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Yellow right half */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 52%;
+      height: 100%;
+      background: radial-gradient(ellipse at 60% 40%, var(--yellow-light) 0%, var(--yellow) 45%, var(--yellow-deep) 100%);
+      clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+      z-index: 0;
+    }
+
+    /* Noise grain overlay */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      z-index: 1; pointer-events: none; opacity: 0.35;
+    }
+
+    /* ── LEFT COPY ── */
+    .hero-copy {
+      position: relative; z-index: 10;
+      padding: 140px 60px 80px 60px;
+      animation: slideRight 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.4s;
+      opacity: 0; transform: translateX(-40px);
+    }
+    @keyframes slideRight { to { opacity: 1; transform: translateX(0); } }
+
+    .tag-line {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 24px;
+    }
+    .tag-line::before {
+      content: '';
+      display: block; width: 30px; height: 1px;
+      background: var(--yellow);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 8vw, 8rem);
+      line-height: 0.92;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    h1 span { color: var(--yellow); }
+
+    .hero-desc {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.58);
+      max-width: 380px;
+      margin-bottom: 48px;
+    }
+
+    /* Stats row */
+    .stats {
+      display: flex; gap: 36px;
+      margin-bottom: 56px;
+    }
+    .stat-item { display: flex; flex-direction: column; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--yellow);
+      letter-spacing: 0.05em;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+
+    /* CTA cluster */
+    .cta-cluster { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+
+    .btn-buy {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 18px 44px;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 3px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-decoration: none;
+    }
+    .btn-buy::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--black);
+      transform: translateX(-105%);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-buy span { position: relative; z-index: 1; }
+    .btn-buy:hover { box-shadow: 0 12px 40px rgba(255,214,0,0.45); transform: translateY(-2px); }
+    .btn-buy:hover::before { transform: translateX(0); }
+    .btn-buy:hover span { color: var(--yellow); }
+
+    .btn-learn {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: color 0.25s, gap 0.25s;
+    }
+    .btn-learn::after { content: '→'; transition: transform 0.25s; }
+    .btn-learn:hover { color: var(--white); gap: 14px; }
+
+    /* ── RIGHT — PRODUCT IMAGE ── */
+    .hero-visual {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 40px 80px;
+      animation: slideLeft 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.55s;
+      opacity: 0; transform: translateX(40px);
+    }
+    @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
+
+    .product-wrap {
+      position: relative;
+      width: clamp(300px, 42vw, 540px);
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Floating animation */
+    .product-img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      position: relative; z-index: 2;
+      filter: drop-shadow(0 40px 60px rgba(0,0,0,0.55)) drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50%       { transform: translateY(-18px) rotate(1deg); }
+    }
+
+    /* Ground shadow */
+    .shadow-ellipse {
+      position: absolute;
+      bottom: 0px; left: 50%;
+      transform: translateX(-50%);
+      width: 68%; height: 28px;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.38) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: shadowPulse 4s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes shadowPulse {
+      0%, 100% { transform: translateX(-50%) scaleX(1);   opacity: 0.55; }
+      50%       { transform: translateX(-50%) scaleX(0.8); opacity: 0.28; }
+    }
+
+    /* Decorative ring */
+    .ring {
+      position: absolute;
+      border: 1px solid rgba(17,17,17,0.12);
+      border-radius: 50%;
+      animation: spinRing 18s linear infinite;
+    }
+    .ring-1 { width: 105%; height: 105%; }
+    .ring-2 { width: 120%; height: 120%; animation-direction: reverse; animation-duration: 28s; }
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ── GLASS CARD ── */
+    .glass-card {
+      position: absolute;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 16px 22px;
+      z-index: 20;
+    }
+    .card-battery {
+      bottom: 12%; right: -8%;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .battery-icon {
+      font-size: 1.5rem;
+    }
+    .card-battery .c-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.45); }
+    .card-battery .c-val  { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--black); letter-spacing: 0.06em; }
+
+    .card-mode {
+      top: 18%; left: -10%;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .card-mode .c-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+    .card-mode .c-val  { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--yellow); letter-spacing: 0.08em; }
+    .mode-dots { display: flex; gap: 5px; margin-top: 4px; }
+    .mode-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.3s;
+    }
+    .mode-dot.active { background: var(--yellow); }
+
+    /* ── FEATURES STRIP ── */
+    .features {
+      position: relative; z-index: 5;
+      background: var(--gray);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .feat-item {
+      flex: 1;
+      max-width: 280px;
+      display: flex; flex-direction: column;
+      align-items: flex-start;
+      padding: 48px 40px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .feat-item:last-child { border-right: none; }
+    .feat-item:hover { background: rgba(255,214,0,0.04); }
+    .feat-icon {
+      width: 44px; height: 44px;
+      background: rgba(255,214,0,0.1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .feat-item:hover .feat-icon { background: rgba(255,214,0,0.2); transform: scale(1.08); }
+    .feat-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+    .feat-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ── PRICE SECTION ── */
+    .price-section {
+      position: relative; z-index: 5;
+      background: var(--black);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 40px;
+      overflow: hidden;
+    }
+    .price-section::before {
+      content: 'VOID';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(12rem, 30vw, 24rem);
+      color: rgba(255,255,255,0.025);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+      user-select: none;
+    }
+    .price-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 16px;
+    }
+    .price-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 12vw, 10rem);
+      line-height: 1;
+      color: var(--yellow);
+      letter-spacing: 0.02em;
+    }
+    .price-num sup { font-size: 0.35em; vertical-align: super; }
+    .price-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+      margin-bottom: 48px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--gray);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 32px 60px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--yellow);
+      letter-spacing: 0.18em;
+    }
+    .footer-copy {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.22);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.28); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--yellow); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 24px 28px; }
+      .nav-links { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+      }
+      .hero::after {
+        top: auto; bottom: 0; right: 0; left: 0;
+        width: 100%; height: 52%;
+        clip-path: polygon(0 14%, 100% 0, 100% 100%, 0 100%);
+      }
+
+      .hero-copy { padding: 120px 28px 40px; }
+      .hero-visual { padding: 20px 28px 80px; }
+      .product-wrap { width: min(82vw, 360px); }
+
+      .card-battery { right: 0; bottom: 5%; }
+      .card-mode    { left: 0; top: 8%; }
+
+      .features { flex-direction: column; align-items: center; }
+      .feat-item { max-width: 100%; width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .feat-item:last-child { border-bottom: none; }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    /* ── CURSOR GLOW ── */
+    .cursor-glow {
+      position: fixed;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,214,0,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%,-50%);
+      transition: opacity 0.4s;
+      z-index: 9999;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">VOID</a>
+    <ul class="nav-links">
+      <li><a href="#">Sound</a></li>
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Compare</a></li>
+      <li><a href="#">Support</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- Left copy -->
+    <div class="hero-copy">
+      <div class="tag-line">New Drop 2026</div>
+      <h1>Pure<br><span>Sound.</span><br>Zero<br>Limits.</h1>
+      <p class="hero-desc">
+        Engineered for those who hear the world differently. Adaptive noise cancellation, 40-hour battery, and drivers tuned to studio reference.
+      </p>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-num">40H</span>
+          <span class="stat-label">Battery</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">-42</span>
+          <span class="stat-label">dB ANC</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">Hi-Fi</span>
+          <span class="stat-label">Audio</span>
+        </div>
+      </div>
+      <div class="cta-cluster">
+        <a href="#" class="btn-buy"><span>Buy Now</span></a>
+        <a href="#" class="btn-learn">Explore Sound</a>
+      </div>
+    </div>
+
+    <!-- Right visual -->
+    <div class="hero-visual">
+      <div class="product-wrap">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <img
+          src="headphone.png"
+          alt="VOID Wireless Headphones"
+          class="product-img"
+        />
+        <div class="shadow-ellipse"></div>
+
+        <!-- Glass cards -->
+        <div class="glass-card card-battery">
+          <span class="battery-icon">🔋</span>
+          <div>
+            <div class="c-label">Battery Life</div>
+            <div class="c-val">40 HRS</div>
+          </div>
+        </div>
+
+        <div class="glass-card card-mode">
+          <div class="c-label">Active Mode</div>
+          <div class="c-val">ANC ON</div>
+          <div class="mode-dots">
+            <div class="mode-dot active"></div>
+            <div class="mode-dot active"></div>
+            <div class="mode-dot active"></div>
+            <div class="mode-dot"></div>
+            <div class="mode-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <div class="features reveal">
+    <div class="feat-item">
+      <div class="feat-icon">🎧</div>
+      <div class="feat-title">40mm Drivers</div>
+      <div class="feat-desc">Custom-tuned neodymium drivers delivering rich lows and crisp highs across the full 20Hz–20kHz range.</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">🔇</div>
+      <div class="feat-title">Adaptive ANC</div>
+      <div class="feat-desc">Intelligent noise mapping with real-time environmental sensing. Silence the world, not the music.</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Fast Charge</div>
+      <div class="feat-desc">10 minutes of charge delivers 3 hours of playback. Full power in 90 minutes via USB-C.</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">📡</div>
+      <div class="feat-title">Multipoint BT 5.3</div>
+      <div class="feat-desc">Seamlessly connect to two devices simultaneously. Switch without interruption, without compromise.</div>
+    </div>
+  </div>
+
+  <!-- PRICE -->
+  <section class="price-section reveal">
+    <div class="price-eyebrow">Starting at</div>
+    <div class="price-num"><sup>$</sup>299</div>
+    <div class="price-note">Free shipping · 2-year warranty · 30-day returns</div>
+    <a href="#" class="btn-buy" style="font-size:0.9rem; padding: 20px 56px;"><span>Order Now</span></a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">VOID</div>
+    <div class="footer-copy">© 2026 VOID Audio. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Cursor glow
+    const glow = document.getElementById('cursorGlow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Mode dots pulse
+    const dots = document.querySelectorAll('.mode-dot');
+    let dotStep = 3;
+    let dir = 1;
+    setInterval(() => {
+      dots.forEach((d, i) => d.classList.toggle('active', i < dotStep));
+      dotStep += dir;
+      if (dotStep >= 5 || dotStep <= 1) dir *= -1;
+    }, 700);
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 60
+        ? 'rgba(17,17,17,0.88)'
+        : 'transparent';
+      nav.style.backdropFilter = window.scrollY > 60 ? 'blur(18px)' : 'none';
+      nav.style.transition = 'background 0.35s, backdrop-filter 0.35s';
+      nav.style.borderBottom = window.scrollY > 60 ? '1px solid rgba(255,255,255,0.06)' : 'none';
+    });
+  </script>
+</body>
+</html>
